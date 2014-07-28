@@ -1,0 +1,89 @@
+<html>
+<head>
+	<title>caps yap</title>
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/flick/jquery-ui-1.10.3.custom.min.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
+
+	<script src="js/jquery-1.10.1.min.js"></script>
+	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="js/colorpicker.js"></script>
+</head>
+<body>
+
+	<div id="sayfa">
+		<h1 class="logo">capsyap!</h1>
+
+		<div id="toolbar">
+			<a href="#" id="ekleYazi" class="button">Yazı Ekle</a>
+			<a href="#" id="ekleSekil" class="button">Şekil Ekle</a>
+			<a href="#" id="ekleResim" class="button">Resim Ekle</a>
+			<a href="#" id="export" class="button" style="float:right;">Çıktı Al</a>
+		</div>
+
+		<div id="tual">
+			<div id="can"><canvas id="canvas" width="600" height="720"></canvas></div>
+
+			<div id="pwrap">
+				<div id="tt">
+					Tual Yükseklik
+					<div id="tualYuk"></div>
+				</div>
+
+				<div id="panel">
+					<h3>Seçili Nesne</h3>
+
+					<div class="tool">
+						<button id="nesneSil">Sil</button>
+						<button id="tasiOne">Öne Getir</button>
+						<button id="tasiArkaya">Geriye Gönder</button>
+					</div>
+
+					<div class="tool">
+						<div id="editText" class="editor">
+							<label for="txtText">Yazı</label><br/>
+							<textarea id="txtText">caps yap!</textarea>
+						</div>
+						<div id="editShape" class="editor">
+							<label for="renkSec">Renk</label>
+							<div id="renkSec"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="adv">
+				<div id="ads"></div>
+
+				twiiter </br>
+				facebook </br>
+			</div>
+		</div>
+	</div>
+
+	<div id="dlgResimEkle" title="Resim Ekle">
+		<div id="tabs">
+		  <ul>
+		    <li><a href="#tabs-1">Galeri</a></li>
+		    <li><a href="#tabs-2">Adresten Yükle</a></li>
+		  </ul>
+		  <div id="tabs-1">
+
+		  </div>
+		  <div id="tabs-2">
+		  	<div>Resim URL'sini giriniz:</div>
+			<div class="min">örnek: http://www.incicaps.com/res/i/logo.png </div>
+			<br />
+			<br />
+			<input type="text" id="txtResim" value="http://www.incicaps.com/res/i/logo.png" />
+			<div id="resimPrev"></div>
+		  </div>
+		</div>
+	</div>
+
+	<script src="js/fabric.all.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

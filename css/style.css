@@ -1,0 +1,87 @@
+body{
+	font-family: arial;
+	margin: 0;
+	padding: 0;
+	border-top: 5px dashed #eee;
+}
+
+#logo{
+	font-family: serif;
+}
+
+#toolbar{
+	margin-bottom: 5px;
+	width: 610px;
+}
+
+#sayfa{
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#tual{
+	overflow: hidden;
+}
+
+#can{
+	float: left;
+	width: 600px;
+	border: 3px solid #eee;
+	margin-right: 20px;
+}
+
+#pwrap {
+	height: 433px;
+}
+
+#tt{
+	float: left;
+	width: 250px;
+}
+
+#panel{
+	float: left;
+	width: 250px;
+}
+
+#adv{
+	float: left;
+	width: 250px;
+	border-bottom: 3px solid #eee; 
+}
+
+#ads{
+	display: block;
+	width: 100%;
+	height: 250px;
+	background-color: #efefef;
+
+	float: right;
+}
+
+#panel .tool{
+	margin-bottom: 20px;
+}
+
+#dlgResimEkle input{
+	width: 100%;
+}
+
+.min{
+	font-size: 11px;
+	color: #aaa;
+}
+
+#renkSec{
+	display: block;
+	width: 40px;
+	height: 40px;
+	border: 1px solid #000;
+	background-color: #f00;
+}
+
+#txtText{
+	height: 100px;
+	width: 100%;
+}
