@@ -3,70 +3,49 @@
 	<title>caps.li</title>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<link rel="stylesheet" type="text/css" href="css/flick/jquery-ui-1.10.3.custom.min.css" />
-	<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
-
-	<script src="js/vendor/jquery-1.10.1.min.js"></script>
-	<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="js/vendor/colorpicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/colorpicker.css" />
 </head>
 <body>
+	
+	<div id="logo"></div>
+	<div id="toolbar">
+		<a href="#" id="export" class="button" style="float:right;">Çıktı Al</a>
+	</div>
 
-	<div id="sayfa">
-		<h1 class="logo">capsyap!</h1>
-
-		<div id="toolbar">
-			<h3>ekle</h3>
-			<a href="#" id="ekleYazi" class="button">Yazı Ekle</a>
-			<a href="#" id="ekleSekil" class="button">Şekil Ekle</a>
-			<a href="#" id="ekleResim" class="button">Resim Ekle</a>
-			<a href="#" id="export" class="button" style="float:right;">Çıktı Al</a>
+	<div id="sidebar">
+		<div class="" data-bind="with: ui">
+			<h5>ekle</h5>
+			<button type="button" data-bind="click: addText" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-font"></span> Yazı</button>
+			<button type="button" data-bind="click: addRect" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-stop"></span> Şekil</button>
+			<button type="button" data-bind="click: dlgAddImage" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-picture"></span> Resim</button>
 		</div>
 
-		<div id="tual">
-			<div id="can">
-				<canvas id="canvas" width="600" height="720"></canvas>
-			</div>
+		<hr />
 
-			<div id="pwrap">
-				<div id="tt">
-					Tual Yükseklik
-					<div id="tualYuk"></div>
+		<div>
+			<div data-bind="if: selectedObject">
+				<h5>Seçili Nesne</h5>
+
+				<p>
+					<button type="button" data-bind="click: removeObject" class="btn btn-default btn-sm">Sil</button>
+					<button type="button" data-bind="click: bringToFront" class="btn btn-default btn-sm">Öne Getir</button>
+					<button type="button" data-bind="click: sendToBack" class="btn btn-default btn-sm">Geriye Gönder</button>
+				</p>
+
+				<div data-bind="template: {name: selectedObject().editorTemplate, data: selectedObject()}">
 				</div>
-
-				<div id="panel">
-					<h3>Seçili Nesne</h3>
-
-					<div class="tool">
-						<button id="nesneSil">Sil</button>
-						<button id="tasiOne">Öne Getir</button>
-						<button id="tasiArkaya">Geriye Gönder</button>
-					</div>
-
-					<div class="tool">
-						<div id="editText" class="editor">
-							<label for="txtText">Yazı</label><br/>
-							<textarea id="txtText">caps yap!</textarea>
-						</div>
-						<div id="editShape" class="editor">
-							<label for="renkSec">Renk</label>
-							<div id="renkSec"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div id="adv">
-				<div id="ads"></div>
-
-				twiiter </br>
-				facebook </br>
 			</div>
 		</div>
 	</div>
 
-	<div id="dlgResimEkle" title="Resim Ekle">
+	<div id="main">
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<div id="dlgAddImage" title="Resim Ekle">
 		<div id="tabs">
 		  <ul>
 		    <li><a href="#tabs-1">Galeri</a></li>
@@ -85,11 +64,53 @@
 		  </div>
 		</div>
 	</div>
+	
+	<!-- editor templates -->
 
+	<!-- textbox template -->
+	<script type="text/html" id="edtTmp_txt">
+	    <span>Yazı</span>
+	    <input type="text" data-bind="value: attributes.text.value" />
+	    <br/>
+	    <span>Boyut</span>
+	    <input type="text" data-bind="value: attributes.fontSize.value" />
+	    <br/>
+	    <span>Tip</span>
+	    <a href="#" data-bind="click: function(){ attributes.fontWeight.value('normal') }">Normal</a>
+	    <a href="#" data-bind="click: function(){ attributes.fontWeight.value('bold') }">Kalın</a>
+	    <br/>
+	    <span>Renk</span>
+	    <input type="color" data-bind="value: attributes.fill.value">
+	</script>
+
+	<!-- rectangle template -->
+	<script type="text/html" id="edtTmp_rect">
+	    <span>Açı</span>
+	    <input type="text" data-bind="value: attributes.angle.value" />
+	    <br/>
+	</script>
+
+	<!--  vendor -->
+	<script src="js/vendor/jquery-1.10.1.min.js"></script>
+	<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="js/vendor/colorpicker.js"></script>
+	
+	<!--
 	<script src="js/vendor/fabric.all.min.js"></script>
+-->
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
 	<script src="js/vendor/publisher.js"></script>
-	<script src="js/modules/ui.js"></script>
+
+	<!-- app models -->
+	<script type="text/javascript" src="js/models/objAttribute.js"></script>
+	<script type="text/javascript" src="js/models/objBase.js"></script>
+	<script type="text/javascript" src="js/models/objText.js"></script>
+	<script type="text/javascript" src="js/models/objRect.js"></script>
+
+	<!-- app modules -->
 	<script src="js/modules/core.js"></script>
+	<script src="js/modules/ui.js"></script>
 	<script src="js/main.js"></script>
 </body>
 </html>
