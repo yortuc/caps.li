@@ -1,116 +1,412 @@
 <html>
 <head>
 	<title>caps.li</title>
-	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/colorpicker.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+
 </head>
 <body>
 	
-	<div id="logo"></div>
-	<div id="toolbar">
-		<a href="#" id="export" class="button" style="float:right;">Çıktı Al</a>
-	</div>
+	<div id="logo" data-toggle="tooltip" data-placement="bottom" title="ailenizin caps editörü"></div>
 
 	<div id="sidebar">
-		<div class="" data-bind="with: ui">
-			<h5>ekle</h5>
-			<button type="button" data-bind="click: addText" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-font"></span> Yazı</button>
-			<button type="button" data-bind="click: addRect" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-stop"></span> Şekil</button>
-			<button type="button" data-bind="click: dlgAddImage" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-picture"></span> Resim</button>
+		<div data-bind="with: ui">
+			<h5>Ekle</h5>
+			<p>
+			    <button type="button" data-bind="click: addText"
+			    	class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Yazı ekle">
+			    		<span class="glyphicon glyphicon-font"></span> 
+			    </button>
+				
+				<button type="button" data-bind="click: addRect" 
+					class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Şekil ekle">
+						<span class="glyphicon glyphicon-stop"></span> 
+				</button>
+			
+				<button type="button" data-bind="click: loadPhotoDlg" data-toggle="tooltip" data-placement="top" title="Resim Yükle"
+					class="btn btn-default">
+					<span class="glyphicon glyphicon-picture"></span> 
+				</button>
+
+				<button type="button" data-bind="click: takePhotoDlg" data-toggle="tooltip" data-placement="top" title="Fotoğraf Çek"
+					class="btn btn-default">
+					<span class="glyphicon glyphicon-camera"></span> 
+				</button>
+
+				<button type="button" data-bind="click: showCapsProp" data-toggle="tooltip" data-placement="left" title="Caps özellikleri"
+					class="btn btn-default pull-right">
+					<span class="glyphicon glyphicon-cog"></span>
+				</button>
+			</p>
+			<!-- add img -->
+			<!--
+			<div class="btn-group">
+			  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+			    <span class="glyphicon glyphicon-picture"></span> Foto <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu">
+			  	<li><a href="#" data-bind="click: loadPhotoDlg">Yükle</a></li>
+			    <li><a href="#" data-bind="click: takePhotoDlg">Fotoğraf Çek</a></li>
+			  </ul>
+			</div>
+			-->
 		</div>
 
-		<hr />
+		<hr/>
 
-		<div>
+		<div id="selectedObject">
+			<h5>Özellikler</h5>
 			<div data-bind="if: selectedObject">
-				<h5>Seçili Nesne</h5>
-
+				<!-- standard object tools -->
 				<p>
-					<button type="button" data-bind="click: removeObject" class="btn btn-default btn-sm">Sil</button>
-					<button type="button" data-bind="click: bringToFront" class="btn btn-default btn-sm">Öne Getir</button>
+					<button type="button" data-bind="click: removeObject" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="Sil"><span class="glyphicon glyphicon-trash"></span> &nbsp;</button>
+					<button type="button" data-bind="click: bringToFront" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="Öne taşı">Öne Getir</button>
 					<button type="button" data-bind="click: sendToBack" class="btn btn-default btn-sm">Geriye Gönder</button>
 				</p>
+
+				<!-- object positioning tools -->
+				<div class="btn-group">
+				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				    <span class="glyphicon glyphicon-align-left"></span>
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+				    <li><a href="#" data-bind="click: centerX">Yatay Ortala</a></li>
+				    <li><a href="#" data-bind="click: centerY">Dikey Ortala</a></li>
+				    <li class="divider"></li>
+				    <li><a href="#" data-bind="click: placeLeft">Sola Yasla</a></li>
+				    <li><a href="#" data-bind="click: placeRight">Sağa Yasla</a></li>
+				    <li class="divider"></li>
+				    <li><a href="#" data-bind="click: placeTop">Yukarı Yasla</a></li>
+				    <li><a href="#" data-bind="click: placeBottom">Aşağı Yasla</a></li>
+				  </ul>
+				</div>
+
+				<!-- object resizing tools -->
+				<div class="btn-group" data-bind="if: selectedObject().type == 'rect'">
+				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				    <span class="glyphicon glyphicon-resize-full"></span>
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+				    <li><a href="#" data-bind="click: fitX">Yatay Uzat</a></li>
+				    <li><a href="#" data-bind="click: fitY">Dikey Uzat</a></li>
+				  </ul>
+				</div>
+
+				<hr/>
 
 				<div data-bind="template: {name: selectedObject().editorTemplate, data: selectedObject()}">
 				</div>
 			</div>
+			<div data-bind="if: !selectedObject()">
+				<div data-bind="template: { name: 'edtTmp_canvas', data: canvas }" class="panel-body"></div>
+			</div>
 		</div>
+
+		<hr />
+		<!--
+		<div>
+			<p>
+				<button type="button" data-bind="click: ui.exportFile" class="btn btn-default btn-sm">
+					<span class="glyphicon glyphicon-download"></span> İndir
+				</button>
+				
+				<button type="button" id="export" class="btn btn-default btn-sm">
+					<i class="fa fa-twitter"></i> Tweet'le
+				</button>
+			</p>
+		</div>
+		-->
 	</div>
 
 	<div id="main">
+
+		<div id="toolbar">
+			<button type="button" data-bind="click: ui.exportFile" class="btn btn-danger btn-sm">
+				<span class="glyphicon glyphicon-download"></span> İndir
+			</button>
+			
+			<!--
+			<button type="button" id="export" class="btn btn-default btn-sm">
+				<i class="fa fa-twitter"></i> Tweet'le
+			</button>
+			-->
+		</div>
+
 		<canvas id="canvas"></canvas>
+		<input type="file" id="inpFile" />
 	</div>
 
-	<div id="dlgAddImage" title="Resim Ekle">
-		<div id="tabs">
-		  <ul>
-		    <li><a href="#tabs-1">Galeri</a></li>
-		    <li><a href="#tabs-2">Adresten Yükle</a></li>
-		  </ul>
-		  <div id="tabs-1">
+	<!-- library -->
+	<!-- 
+	<div class="panel-group" id="library">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+			  	<span class="glyphicon glyphicon-chevron-right"></span>
+			    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+			    	Kütüphane
+			    </a>
+			  </h4>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse in">
+			  <div class="panel-body">
+			  	<ul class="nav nav-tabs" role="tablist">
+			      <li class="active"><a href="#home" role="tab" data-toggle="tab">karakter</a></li>
+			      <li class=""><a href="#profile" role="tab" data-toggle="tab">aksesuar</a></li>
+			      <li class="dropdown">
+			        <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">diğer <span class="caret"></span></a>
+			        <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+			          <li><a href="#dropdown1" tabindex="-1" role="tab" data-toggle="tab">@fat</a></li>
+			          <li><a href="#dropdown2" tabindex="-1" role="tab" data-toggle="tab">@mdo</a></li>
+			        </ul>
+			      </li>
+			    </ul>
+			    <div class="tab-content">
+			      <div class="tab-pane fade active in" id="home">
+			        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+			      </div>
+			      <div class="tab-pane fade" id="profile">
+			        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+			      </div>
+			      <div class="tab-pane fade" id="dropdown1">
+			        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+			      </div>
+			      <div class="tab-pane fade" id="dropdown2">
+			        <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>	
+	</div>
+	-->
 
-		  </div>
-		  <div id="tabs-2">
-		  	<div>Resim URL'sini giriniz:</div>
-			<div class="min">örnek: http://www.incicaps.com/res/i/logo.png </div>
-			<br />
-			<br />
-			<input type="text" id="txtResim" value="http://www.incicaps.com/res/i/logo.png" />
-			<div id="resimPrev"></div>
-		  </div>
-		</div>
+	<!-- add image dialog -->
+	<div class="modal fade" id="dlgAddImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Resim Ekle</h4>
+	      </div>
+	      <div class="modal-body">
+		  	<ul class="nav nav-tabs" role="tablist">
+		      <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+		      <li class=""><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+		      <li class="dropdown">
+		        <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+		        <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+		          <li><a href="#dropdown1" tabindex="-1" role="tab" data-toggle="tab">@fat</a></li>
+		          <li><a href="#dropdown2" tabindex="-1" role="tab" data-toggle="tab">@mdo</a></li>
+		        </ul>
+		      </li>
+		    </ul>
+		    <div class="tab-content">
+		      <div class="tab-pane fade active in" id="home">
+		        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+		      </div>
+		      <div class="tab-pane fade" id="profile">
+		        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+		      </div>
+		      <div class="tab-pane fade" id="dropdown1">
+		        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+		      </div>
+		      <div class="tab-pane fade" id="dropdown2">
+		        <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+		      </div>
+		    </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">ok</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	
 	<!-- editor templates -->
 
 	<!-- textbox template -->
 	<script type="text/html" id="edtTmp_txt">
-	    <span>Yazı</span>
-	    <input type="text" data-bind="value: attributes.text.value" />
-	    <br/>
-	    <span>Boyut</span>
-	    <input type="text" data-bind="value: attributes.fontSize.value" />
-	    <br/>
-	    <span>Tip</span>
-	    <a href="#" data-bind="click: function(){ attributes.fontWeight.value('normal') }">Normal</a>
-	    <a href="#" data-bind="click: function(){ attributes.fontWeight.value('bold') }">Kalın</a>
-	    <br/>
-	    <span>Renk</span>
-	    <input type="color" data-bind="value: attributes.fill.value">
+		<form class="form-horizontal" role="form">
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Tip</label>
+				<div class="col-sm-10 btn-group btn-group-sm" data-bind="with: style">
+					<button data-bind="click: function(){ toggle('bold') }, css: { 'active' : bold } " type="button" class="btn btn-default"><strong>K</strong></button>
+					<button data-bind="click: function(){ toggle('italic') }, css: { 'active' : italic }" type="button" class="btn btn-default"><em>I</em></button>
+					<button data-bind="click: function(){ toggle('underline') }, css: { 'active': underline }" type="button" class="btn btn-default"><u>A</u></button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Hiza</label>
+				<div class="col-sm-10 btn-group" data-toggle="buttons">
+					<label class="btn btn-default" data-bind="click: function(){ toggleTextAlign('left') }, css:{'active': style.textAlign() == 'left'}">
+						<input value="left" type="radio" name="optTextAlign"> Sol
+					</label>
+					<label class="btn btn-default" data-bind="click: function(){ toggleTextAlign('center') }, css:{'active': style.textAlign() == 'center'}">
+						<input value="center" type="radio" name="optTextAlign"> Orta
+					</label>
+					<label class="btn btn-default" data-bind="click: function(){ toggleTextAlign('right') }, css:{'active': style.textAlign() == 'right'}">
+						<input value="right" type="radio" name="optTextAlign"> Sağ
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="attFont" class="col-sm-2 control-label">Font</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="attFont" 
+						data-bind="options: attributes.fonts, value: attributes.fontFamily.value"></select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="attText" class="col-sm-2 control-label">Metin</label>
+				<div class="col-sm-10">
+					<textarea type="text" data-bind="value: attributes.text.value, valueUpdate: 'keyup'" class="form-control" id="attText"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="attFontSize" class="col-sm-2 control-label">Boyut</label>
+				<div class="col-sm-10">
+					<input type="range" data-bind="value: attributes.fontSize.value, valueUpdate: 'input'" 
+						min="12" max="120" step="1" id="attFontSize" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="attFontColor" class="col-sm-2 control-label">Renk</label>
+				<div class="col-sm-10">
+					<input type="color" id="attFontColor" data-bind="value: attributes.fill.value" />
+				</div>
+			</div>
+		</form>
 	</script>
 
 	<!-- rectangle template -->
 	<script type="text/html" id="edtTmp_rect">
-	    <span>Açı</span>
-	    <input type="text" data-bind="value: attributes.angle.value" />
-	    <br/>
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Renk</label>
+				<div class="col-sm-8 btn-group btn-group-sm">
+					<input type="color" data-bind="value: attributes.fill.value">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Saydamlık</label>
+				<div class="col-sm-8 btn-group btn-group-sm">
+					<input type="range" min="0.1" max="1" step="0.1" data-bind="value: attributes.opacity.value, valueUpdate='input'">
+				</div>
+			</div>
+		</form>
 	</script>
 
+	<!-- canvas template -->
+	<script type="text/html" id="edtTmp_canvas">
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-6 control-label">Arkaplan Rengi</label>
+				<div class="col-sm-6 btn-group btn-group-sm">
+					<input type="color" data-bind="value: attributes.backgroundColor.value" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-6 control-label">Genişlik</label>
+				<div class="col-sm-6 btn-group btn-group-sm">
+					<input class="form-control" type="number" data-bind="value: attributes.width.value"
+							min="200" max="1400" step="1" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-6 control-label">Yükseklik</label>
+				<div class="col-sm-6 btn-group btn-group-sm">
+					<input class="form-control" type="number" data-bind="value: attributes.height.value"
+							min="200" max="1400" step="1" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-12 btn-group btn-group-sm">
+					<button type="button" data-bind="click: fitCanvas" class="btn btn-default">İçeriğe Göre Boyutlandır</button>
+				</div>
+			</div>
+		</form>
+	</script>
+
+	<!-- take photo -->
+	<div class="modal fade" id="dlgTakePhoto" data-bind="with: webCam" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Fotoğraf Çek</h4>
+	      </div>
+	      <div class="modal-body">
+			<video id="pht_video"></video>
+			<button type="button" class="btn btn-primary" data-bind="click: takePhoto">Fotoğraf Çek</button>
+			<canvas id="pht_canvas"></canvas>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">ok</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- about -->
+	<div class="modal fade" id="dlgAbout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	        <h4 class="modal-title" id="myModalLabel">hakkında</h4>
+	      </div>
+	      <div class="modal-body">
+	        evren yortuçboylu (c) 2014 
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">ok</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
 	<!--  vendor -->
-	<script src="js/vendor/jquery-1.10.1.min.js"></script>
-	<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="js/vendor/colorpicker.js"></script>
+	<script type="text/javascript" src="js/vendor/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 	
-	<!--
-	<script src="js/vendor/fabric.all.min.js"></script>
--->
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
+	
+	<!--
 	<script src="js/vendor/publisher.js"></script>
+	-->
 
 	<!-- app models -->
 	<script type="text/javascript" src="js/models/objAttribute.js"></script>
 	<script type="text/javascript" src="js/models/objBase.js"></script>
 	<script type="text/javascript" src="js/models/objText.js"></script>
 	<script type="text/javascript" src="js/models/objRect.js"></script>
+	<script type="text/javascript" src="js/models/objCanvas.js"></script>
 
 	<!-- app modules -->
 	<script src="js/modules/core.js"></script>
 	<script src="js/modules/ui.js"></script>
+	<script src="js/modules/webCam.js"></script>
 	<script src="js/main.js"></script>
 </body>
 </html>

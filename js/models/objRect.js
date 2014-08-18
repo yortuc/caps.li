@@ -4,27 +4,40 @@ function objRect(opt){
 
 	opt = opt || {};
 
+	self.type = "rect";
 	self.editorTemplate = "edtTmp_rect";
-
-	self.set({
-		left: opt.left || 100,
-		top: opt.top || 100,
-		fill: opt.color || 'red',
-		width: opt.width || 100,
-		height: opt.height || 100
-	});
 
 	self.attributes = {};
 
-	// text özelliği
+	//color
 	objAttributeDecorator({
 		obj: self,
-		name: "angle",
-		value: opt.angle || 0,
-		onChange: function(val){
-			self.setAngle(val);
-			capsli.canvas.renderAll();
-		}
+		name: "fill",
+		value: opt.fill || "#ff0000"
+	});
+
+	// opacity
+	objAttributeDecorator({
+		obj: self,
+		name: "opacity",
+		value: opt.opacity || 1
+	});
+
+	// init
+	self.set({
+		left: opt.left || 100,
+		top: opt.top || 100,
+
+		fill: opt.fill || '#ff0000',
+		width: opt.width || 140,
+		height: opt.height || 60
+
+		/*,shadow: new fabric.Shadow({
+			color: 'rgba(0,0,0,0.3)',
+			blur: 10,
+			offsetX: 10,
+			offsetY: 10
+		})*/
 	});
 };
 

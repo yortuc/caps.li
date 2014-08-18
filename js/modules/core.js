@@ -12,7 +12,7 @@ var capsli = capsli || {};
 	self.selectedObject = ko.observable();
 
 	self.init = function(){
-		self.canvas = new fabric.Canvas('canvas');
+		self.canvas = objCanvas( "canvas" );
 		
 		self.canvas.setWidth(800);
 		self.canvas.setHeight(600);
@@ -41,7 +41,17 @@ var capsli = capsli || {};
 	};
 
 	self.removeObject = function(){
-		self.canvas.remove(self.selectedObject());
+
+		if(self.selectedObject().objects){
+			self.selectedObject().objects.forEach(function(p){
+				self.canvas.remove(p);
+				self.canvas.renderAll();
+			});
+		}
+		else{
+			self.canvas.remove(self.selectedObject());
+			self.canvas.renderAll();
+		}
 	};
 
 	self.bringToFront = function(){
@@ -50,6 +60,70 @@ var capsli = capsli || {};
 
 	self.sendToBack = function(){
 		self.canvas.sendToBack(self.selectedObject());
+	};
+
+	self.centerX = function(){
+		self.canvas.centerObjectH(self.selectedObject());
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.centerY = function(){
+		self.canvas.centerObjectV(self.selectedObject());
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.fitX = function(){
+		var cw = self.canvas.getWidth();
+
+		self.selectedObject().set({
+			left: cw/2,
+			width: cw
+		});
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.fitY = function(){
+		var ch = self.canvas.getHeight();
+
+		self.selectedObject().set({
+			top: ch/2,
+			height: ch
+		});
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.placeLeft = function(){
+		var w = self.selectedObject().getWidth();
+
+		self.selectedObject().set({ left: w/2 });
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.placeRight = function(){
+		self.selectedObject().set({
+			left: self.canvas.getWidth() - self.selectedObject().getWidth()/2
+		});
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.placeTop = function(){
+		self.selectedObject().set({ top: self.selectedObject().getHeight()/2 });
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
+	};
+
+	self.placeBottom = function(){
+		self.selectedObject().set({
+			top: self.canvas.getHeight() - self.selectedObject().getHeight()/2
+		});
+		self.selectedObject().setCoords();
+		self.canvas.renderAll();
 	};
 
 	capsli = self;		// export module
