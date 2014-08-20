@@ -4,6 +4,7 @@ function objAttributeDecorator(data){
     data.fabricName = data.fabricName || data.name;
 
 	var attr = {
+        fireChange: true,  // whether fire default onChange event or not
         name: data.name,
         title: ko.observable(data.title),
         value: ko.observable(data.value),
@@ -17,6 +18,8 @@ function objAttributeDecorator(data){
     }
 
     attr.value.subscribe(function(newVal){
+        if(!attr.fireChange) return;
+        
         if(data.onChange){
             // custom action
             data.onChange(newVal);

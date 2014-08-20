@@ -25,6 +25,13 @@ var capsli = capsli || {};
 			console.log(self.selectedObject());
 		});
 
+		/*
+		self.canvas.on('object:rotating', function(options) {
+			//self.selectedObject(options.target);
+			console.log(options);
+		});
+		*/
+
 		self.canvas.on('before:selection:cleared', function(data){
 			self.selectedObject(null);
 		});
@@ -60,6 +67,12 @@ var capsli = capsli || {};
 
 	self.sendToBack = function(){
 		self.canvas.sendToBack(self.selectedObject());
+	};
+
+	self.resetAngle = function(){
+		capsli.selectedObject().set({ angle: 0});
+		capsli.selectedObject().setCoords();
+		capsli.canvas.renderAll();
 	};
 
 	self.centerX = function(){
@@ -126,6 +139,8 @@ var capsli = capsli || {};
 		self.canvas.renderAll();
 	};
 
-	capsli = self;		// export module
+	var ob = capsli.objBase;
+	capsli = self;
+	capsli.objBase = ob;
 	self.init();		// init module
 })();

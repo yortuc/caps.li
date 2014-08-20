@@ -65,8 +65,8 @@ function objCanvas(canvasId){
 
 		// get the canvas size
 		objects.forEach(function(p){
-			left = p.getLeft();
-			top = p.getTop();
+			left = p.getLeft() - p.getWidth()/2;
+			top = p.getTop() - p.getHeight()/2;
 			w = left + p.getWidth();
 			h = top + p.getHeight();
 

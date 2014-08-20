@@ -1,4 +1,5 @@
 // ui.js
+var capsli = capsli || {};
 
 (function () {
 
@@ -16,6 +17,12 @@
 				
 				capsli.canvas.setWidth(w);
 				capsli.canvas.setHeight(h);
+
+				// interesting structure :)
+				capsli.canvas.attributes.width.fireChange = false;
+				capsli.canvas.attributes.width.value(w);
+				capsli.canvas.attributes.height.value(h);
+				capsli.canvas.attributes.width.fireChange = true;
 			}
 		});
 
@@ -94,18 +101,38 @@
 	};
 
 	self.exportFile = function(){
+
 		// deactivate selected object(s)
 		capsli.canvas.deactivateAllWithDispatch();
 		capsli.canvas.renderAll();
 
+		// export
 		var url = capsli.canvas.toDataURL('png');
-		var win = window.open(url, '_blank');
+		window.open(url, '_blank');
+
+		// put watermark
+		/*
+		fabric.Image.fromURL("css/images/wm2.png", function(img) {
+			img.set({ 
+				left: capsli.canvas.getWidth() - img.getWidth() - 10,
+				top: img.getHeight()/2
+			});
+			capsli.addObject(img);
+
+			// delete wm
+			capsli.canvas.remove(img);
+		});
+		*/
 	};
 
 	self.showCapsProp = function(){
 		// deactivate selected object(s)
 		capsli.canvas.deactivateAllWithDispatch();
 		capsli.canvas.renderAll();
+	};
+
+	self.aboutDlg = function(){
+		$("#dlgAbout").modal("show");
 	};
 
 	capsli.ui = self;	// export module

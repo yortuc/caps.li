@@ -12,7 +12,7 @@ body{
 #sidebar{
 	position: fixed;
 	left: 0;
-	top: 100px;
+	top: 110px;
 	width: 300px;
 	padding-left: 20px;
 	color: #555;
@@ -32,8 +32,8 @@ canvas{
 
 #logo{
 	background-repeat: no-repeat;
-	background-image: url(images/capsli6.png);
-	width: 195px;
+	background-image: url(images/capsli6_beta.png);
+	width: 228px;
 	height: 33px;
 	position: fixed;
 	left: 20px;
@@ -97,7 +97,17 @@ canvas{
 	visibility: hidden;
 }
 
-
 .row-center {
 	padding-top: 3px !important;
+}
+
+#help{
+	position: absolute;
+	top: 66px;
+	left: 20px;
+	width: 300px;
+}
+
+#help div{
+	padding-top: 5px;
 }
