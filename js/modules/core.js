@@ -25,6 +25,10 @@ var capsli = capsli || {};
 			console.log(self.selectedObject());
 		});
 
+		self.canvas.on('object:modified', function(options) {
+			console.log(options);
+		});
+
 		/*
 		self.canvas.on('object:rotating', function(options) {
 			//self.selectedObject(options.target);

@@ -66,6 +66,16 @@ var capsli = capsli || {};
 		$("#inpFile").click();
 	};
 
+	self.showCapsProp = function(){
+		// deactivate selected object(s)
+		capsli.canvas.deactivateAllWithDispatch();
+		capsli.canvas.renderAll();
+	};
+
+	self.aboutDlg = function(){
+		$("#dlgAbout").modal("show");
+	};
+
 	self.loadPhoto = function(evt){
 
 		var files = evt.target.files; // FileList object
@@ -100,39 +110,55 @@ var capsli = capsli || {};
 	    }
 	};
 
-	self.exportFile = function(){
-
-		// deactivate selected object(s)
-		capsli.canvas.deactivateAllWithDispatch();
-		capsli.canvas.renderAll();
-
-		// export
-		var url = capsli.canvas.toDataURL('png');
-		window.open(url, '_blank');
-
+	self.getData = function(cb){
 		// put watermark
-		/*
-		fabric.Image.fromURL("css/images/wm2.png", function(img) {
+		fabric.Image.fromURL("css/images/wm.png", function(img) {
 			img.set({ 
 				left: capsli.canvas.getWidth() - img.getWidth() - 10,
-				top: img.getHeight()/2
+				top: capsli.canvas.getHeight() - img.getHeight() - 10
 			});
 			capsli.addObject(img);
+			
+			capsli.canvas.deactivateAllWithDispatch();
+			capsli.canvas.renderAll();
+
+			// export
+			var dataUrl = capsli.canvas.toDataURL('png');
+
+			// run callback
+			if(cb) cb(dataUrl);
 
 			// delete wm
 			capsli.canvas.remove(img);
 		});
-		*/
 	};
 
-	self.showCapsProp = function(){
-		// deactivate selected object(s)
-		capsli.canvas.deactivateAllWithDispatch();
-		capsli.canvas.renderAll();
+	self.exportFile = function(){
+		self.getData(function(dataUrl){
+			window.open(dataUrl, '_blank');
+		});
 	};
 
-	self.aboutDlg = function(){
-		$("#dlgAbout").modal("show");
+	self.shareFB = function(){
+		self.getData(function(dataUrl){
+			FB.login(function (response) {
+			    if (response.authResponse) {
+			        var authToken = response.authResponse.accessToken;
+			        
+			        $.post("/save.php", {data: dataUrl}, function(fn){
+			        	var fileName = "http://caps.li/c/" + fn + ".png";
+			        	console.log(fileName);
+			        	fbManager.PostImageToFacebook(authToken, dataUrl);
+			        });
+
+			    } else {
+			    	// didn't accept 
+			    	alert("kabul etmediğin için facebook'ta paylaşamadık :(");
+			    }
+			}, {
+			    scope: 'publish_actions, publish_stream'
+			});
+		});
 	};
 
 	capsli.ui = self;	// export module

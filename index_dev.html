@@ -20,6 +20,27 @@
 		ga('send', 'pageview');
 	</script>
 
+	 <script>
+		window.fbAsyncInit = function() {
+			FB.init({
+			    appId: '1464844850436699', // App ID from the App Dashboard
+			    cookie: true, // set sessions cookies to allow your server to access the session?
+			    xfbml: true, // parse XFBML tags on this page?
+			    frictionlessRequests: true,
+			    oauth: true,
+			    version: 'v2.0'
+			});
+		};
+
+		(function(d, s, id){
+			 var js, fjs = d.getElementsByTagName(s)[0];
+			 if (d.getElementById(id)) {return;}
+			 js = d.createElement(s); js.id = id;
+			 js.src = "//connect.facebook.net/en_US/sdk.js";
+			 fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+    </script>
+
 	<div id="logo" data-toggle="tooltip" data-placement="bottom" title="ailenizin caps editörü"></div>
 
 	<div id="sidebar">
@@ -145,11 +166,11 @@
 				<span class="glyphicon glyphicon-download"></span> İndir
 			</button>
 			
-			<!--
-			<button type="button" id="export" class="btn btn-default btn-sm">
-				<i class="fa fa-twitter"></i> Tweet'le
+
+			<button type="button" data-bind="click: ui.shareFB" class="btn btn-info btn-sm">
+				<i class="fa fa-facebook"></i> Paylaş
 			</button>
-			-->
+			
 		</div>
 
 		<canvas id="canvas"></canvas>
@@ -351,6 +372,7 @@
 	<script type="text/javascript" src="js/models/objCanvas.js"></script>
 
 	<!-- app modules -->
+	<script src="js/vendor/facebook-canvas.js"></script>
 	<script src="js/modules/core.js"></script>
 	<script src="js/modules/ui.js"></script>
 	<script src="js/modules/webCam.js"></script>
